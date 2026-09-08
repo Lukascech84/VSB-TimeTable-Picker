@@ -23,19 +23,29 @@ export async function copyPickScript(selectedEntries, allEntries, timetableData)
     async function executeImport() {
       console.log('%c[Rozvrh Picker] Zahajuji kobercový nálet...', 'color: #4ade80; font-weight: bold');
       
-      const maxWaves = 3; // Počet opakování celého procesu
+      // --- ÚVODNÍ REFRESH ---
+      if (refreshFuncName && typeof window[refreshFuncName] === 'function') {
+         console.log('[Rozvrh Picker] Provádím úvodní AJAX refresh pro probuzení serveru...');
+         window[refreshFuncName]();
+         
+         // Dáme serveru 2 sekundy na zpracování refreshu, než na něj pošleme požadavky
+         await new Promise(r => setTimeout(r, 2000));
+      } else {
+         console.warn('[Rozvrh Picker] Funkce pro refresh nenalezena, pokračuji bez něj.');
+      }
+      
+      const maxWaves = 3;
 
       for (let wave = 1; wave <= maxWaves; wave++) {
         console.log('%c--- Vlna ' + wave + '/' + maxWaves + ' ---', 'color: #38bdf8');
         
         for (let i = 0; i < idsToSelect.length; i++) {
           const id = idsToSelect[i];
-          window[selectFuncName](id); // Odeslání požadavku do Edisonu
+          window[selectFuncName](id); // Odeslání požadavku
           
-          await new Promise(r => setTimeout(r, 400)); // Ochrana proti zabanování za spam
+          await new Promise(r => setTimeout(r, 400)); // Ochrana proti spamu
         }
 
-        // Pokud to není poslední vlna, počkáme 2.5 sekundy před dalším pokusem
         if (wave < maxWaves) {
           console.log('Čekám 2.5 sekundy pro případ opožděného serveru...');
           await new Promise(r => setTimeout(r, 2500));
@@ -44,7 +54,7 @@ export async function copyPickScript(selectedEntries, allEntries, timetableData)
 
       console.log('%c[Rozvrh Picker] Všechny vlny dokončeny!', 'color: #4ade80; font-weight: bold');
       
-      // Aktualizace UI pomocí vestavěné funkce Edisonu
+      // Závěrečný refresh pro zobrazení výsledků
       if (refreshFuncName && typeof window[refreshFuncName] === 'function') {
          setTimeout(() => window[refreshFuncName](), 1000);
       } else {
@@ -54,7 +64,7 @@ export async function copyPickScript(selectedEntries, allEntries, timetableData)
 
     // SNIPER MÓD
     const timeInput = prompt(
-      "Režim SNIPER (Kobercový nálet):\\nZadej čas spuštění (např. 09:30:00).\\n\\nSkript pošle požadavky 3x za sebou s odstupem pár vteřin, aby pokryl případné zpoždění serveru.", 
+      "Režim SNIPER (Kobercový nálet):\\nZadej čas spuštění (např. 09:30:00).\\n\\nSkript nejprve provede refresh a pak pošle požadavky 3x za sebou.", 
       "09:30:00"
     );
     
@@ -84,7 +94,6 @@ export async function copyPickScript(selectedEntries, allEntries, timetableData)
     return true;
   } catch (err) {
     console.error('Chyba při kopírování:', err);
-    // Fallback
     const textArea = document.createElement('textarea');
     textArea.value = script;
     document.body.appendChild(textArea);
