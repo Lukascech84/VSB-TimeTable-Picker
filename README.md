@@ -1,35 +1,10 @@
 # Rozvrh - Výběr Předmětů
 
-[Github pages demo](https://rarach28.github.io/vsb_timetable_picker/)
-
-Tento projekt umožňuje interaktivní výběr a zobrazení rozvrhu. Data rozvrhu jsou načítána z JSON souborů, které obsahují odpovědi API z Edisonu pro každý předmět.
+[Odkaz na Github Pages](https://lukascech84.github.io/VSB-TimeTable-Picker/)
 
 ## Popis
 
-Aplikace zobrazuje rozvrh formou tabulky s dny v týdnu a časovými sloty. Uživatel si může vybrat jednotlivé hodiny (předměty) a zobrazit tak pouze ty, které ho zajímají. K dispozici je i filtrování podle názvu předmětu.
-
-## Technologie
-
-*   **React:** Frontend framework pro uživatelské rozhraní.
-*   **Tailwind CSS:** CSS framework pro stylování.
-
-## Instalace
-
-1.  Naklonujte repozitář:
-    ```bash
-    git clone https://github.com/Rarach28/vsb_timetable_picker.git
-    cd vsb_timetable_picker
-    ```
-
-2.  Nainstalujte závislosti:
-    ```bash
-    npm install
-    ```
-
-3.  Spusťte vývojový server:
-    ```bash
-    npm run dev
-    ```
+Aplikace zobrazuje rozvrh formou tabulky s dny v týdnu a časovými sloty. Uživatel si může vybrané předměty, formou scriptu nechat automaticky zvolit při volbě rozvrhu
 
 ## Struktura projektu
 
